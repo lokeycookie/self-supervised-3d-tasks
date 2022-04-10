@@ -167,9 +167,9 @@ class PatchSegmentationGenerator3D(DataGeneratorBase):
             img = np.load(path)
             img = (img - img.min()) / (img.max() - img.min())
 
-            origin_row = np.random.randint(0, img.shape[0] - self.patch_size[0], self.patches_per_scan)
-            origin_col = np.random.randint(0, img.shape[1] - self.patch_size[1], self.patches_per_scan)
-            origin_dep = np.random.randint(0, img.shape[2] - self.patch_size[2], self.patches_per_scan)
+            origin_row = np.random.randint(0, 1, self.patches_per_scan)
+            origin_col = np.random.randint(0, 1, self.patches_per_scan)
+            origin_dep = np.random.randint(0, 1, self.patches_per_scan)
 
             for o_r, o_c, o_d in zip(origin_row, origin_col, origin_dep):
                 patch = img[o_r:o_r + self.patch_size[0], o_c:o_c + self.patch_size[1], o_d:o_d + self.patch_size[2]]
@@ -184,7 +184,7 @@ class PatchSegmentationGenerator3D(DataGeneratorBase):
         data_y = np.stack(data_y)
 
         data_y = np.rint(data_y).astype(np.int)
-        n_classes = np.max(data_y) + 1
+        n_classes = 4
         data_y = np.eye(n_classes)[data_y]
         if data_y.shape[-2] == 1:
             data_y = np.squeeze(data_y, axis=-2)  # remove second last axis, which is still 1
